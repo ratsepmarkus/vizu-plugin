@@ -1,0 +1,11 @@
+# WordPress
+.DS_Store
+Thumbs.db
+*.log
+
+# Build files
+/dist/
+/node_modules/
+
+# IDE files
+.idea/
