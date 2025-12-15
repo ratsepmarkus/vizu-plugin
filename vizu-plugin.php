@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name:       Vizu Plugin
- * Plugin URI:        https://vizu.disain
+ * Plugin URI:        https://vizu.ee
  * Description:       Custom utility plugin for Vizu Disain websites. Contains useful shortcodes, Elementor tweaks, and other common functionality.
  * Version:           1.0.0
- * Author:            Your Name
- * Author URI:        https://vizu.disain
+ * Author:            Markus Rätsep
+ * Author URI:        https://vizu.ee
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       vizu-plugin
