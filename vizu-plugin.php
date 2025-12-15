@@ -3,7 +3,7 @@
  * Plugin Name:       Vizu Plugin
  * Plugin URI:        https://vizu.ee
  * Description:       Custom utility plugin for Vizu Disain websites. Contains useful shortcodes, Elementor tweaks, and other common functionality.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Markus Rätsep
  * Author URI:        https://vizu.ee
  * License:           GPL-2.0+
@@ -60,7 +60,7 @@ final class Vizu_Plugin {
 	 * Define Plugin Constants.
 	 */
 	private function define_constants() {
-		define( 'VIZU_PLUGIN_VERSION', '1.0.0' );
+		define( 'VIZU_PLUGIN_VERSION', '1.0.1' );
 		define( 'VIZU_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 		define( 'VIZU_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 	}
@@ -88,23 +88,20 @@ final class Vizu_Plugin {
 	private function include_files() {
 		// In the future, you can include other files here, like for custom widgets or post types.
 		// e.g., require_once VIZU_PLUGIN_PATH . 'includes/my-custom-widgets.php';
-		require_once VIZU_PLUGIN_PATH . 'lib/plugin-update-checker/plugin-update-checker.php';
+		require_once VIZU_PLUGIN_PATH . 'lib/plugin-update-checker/load-v5p6.php';
 	}
 
 	/**
 	 * Setup the custom plugin updater.
 	 */
 	private function setup_updater() {
-		// Exit if the update checker class is not available.
-		if ( ! class_exists( 'Puc_v4_Factory' ) ) {
-			return;
-		}
-
-		$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+		// Use the v5 factory.
+		$myUpdateChecker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
 			'https://raw.githubusercontent.com/ratsepmarkus/vizu-plugin/main/vizu-plugin-info.json', // URL to the JSON file on GitHub.
 			__FILE__, // Full path to the main plugin file.
 			'vizu-plugin' // The plugin's slug.
 		);
+
 	}
 
 	/**
