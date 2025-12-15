@@ -3,7 +3,7 @@
  * Plugin Name:       Vizu Plugin
  * Plugin URI:        https://vizu.ee
  * Description:       Custom utility plugin for Vizu Disain websites. Contains useful shortcodes, Elementor tweaks, and other common functionality.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            Markus Rätsep
  * Author URI:        https://vizu.ee
  * License:           GPL-2.0+
@@ -32,6 +32,13 @@ final class Vizu_Plugin {
 	private static $_instance = null;
 
 	/**
+	 * The plugin update checker instance.
+	 * @var \YahnisElsts\PluginUpdateChecker\v5\UpdateChecker
+	 * @since 1.0.2
+	 */
+	protected $update_checker = null;
+
+	/**
 	 * Main Vizu_Plugin Instance.
 	 * Ensures only one instance of the plugin is loaded.
 	 *
@@ -52,15 +59,14 @@ final class Vizu_Plugin {
 	public function __construct() {
 		$this->define_constants();
 		$this->add_actions_and_filters();
-		$this->include_files();
-		$this->setup_updater();
+		add_action( 'plugins_loaded', [ $this, 'init_plugin' ] );
 	}
 
 	/**
 	 * Define Plugin Constants.
 	 */
 	private function define_constants() {
-		define( 'VIZU_PLUGIN_VERSION', '1.0.1' );
+		define( 'VIZU_PLUGIN_VERSION', '1.0.2' );
 		define( 'VIZU_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 		define( 'VIZU_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 	}
@@ -71,6 +77,7 @@ final class Vizu_Plugin {
 	private function add_actions_and_filters() {
 		// Add shortcodes
 		add_shortcode( 'vizu_year', [ $this, 'shortcode_current_year' ] );
+		add_shortcode( 'vizu_hello', [ $this, 'shortcode_hello_world' ] );
 
 		// Add a custom category to Elementor
 		add_action( 'elementor/elements/categories_registered', [ $this, 'add_elementor_widget_category' ] );
@@ -83,20 +90,17 @@ final class Vizu_Plugin {
 	}
 
 	/**
-	 * Include required files.
+	 * Initialize the plugin by including files and setting up the updater.
+	 * This runs after all plugins are loaded.
 	 */
-	private function include_files() {
+	public function init_plugin() {
 		// In the future, you can include other files here, like for custom widgets or post types.
 		// e.g., require_once VIZU_PLUGIN_PATH . 'includes/my-custom-widgets.php';
 		require_once VIZU_PLUGIN_PATH . 'lib/plugin-update-checker/load-v5p6.php';
-	}
 
-	/**
-	 * Setup the custom plugin updater.
-	 */
-	private function setup_updater() {
+		// Setup the custom plugin updater.
 		// Use the v5 factory.
-		$myUpdateChecker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
+		$this->update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
 			'https://raw.githubusercontent.com/ratsepmarkus/vizu-plugin/main/vizu-plugin-info.json', // URL to the JSON file on GitHub.
 			__FILE__, // Full path to the main plugin file.
 			'vizu-plugin' // The plugin's slug.
@@ -111,6 +115,15 @@ final class Vizu_Plugin {
 	 */
 	public function shortcode_current_year() {
 		return date( 'Y' );
+	}
+
+	/**
+	 * [vizu_hello] shortcode.
+	 * Displays a simple "Hello World!" message.
+	 * @return string
+	 */
+	public function shortcode_hello_world() {
+		return 'Hello World! The Vizu Plugin is working.';
 	}
 
 	/**
